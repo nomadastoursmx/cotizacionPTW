@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizador - Peter's Wheels</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .form-section, .preview-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+            font-size: 14px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px; /* Tamaño óptimo para móviles */
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.2);
+        }
+
+        .items-section, .seller-section {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .bank-accounts {
+            background: #e8f4fc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #3498db;
+        }
+
+        .bank-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .bank-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .bank-name {
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+
+        .account-info {
+            font-size: 13px;
+            color: #34495e;
+        }
+
+        .item-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .item-row:hover {
+            background: #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            width: auto;
+            padding: 10px 15px;
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            font-size: 1.1em;
+            padding: 15px 20px;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .preview {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 10px;
+        }
+
+        .preview-info {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 15px;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .preview-table th, .preview-table td {
+            border: 1px solid #ddd;
+            padding: 6px 4px;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .preview-table th {
+            background: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+
+        .preview-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .total-section {
+            text-align: right;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #34495e;
+        }
+
+        .notes {
+            margin-top: 15px;
+            padding: 15px;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+
+        .bank-accounts-preview {
+            margin-top: 15px;
+            padding: 15px;
+            background: #e8f4fc;
+            border: 1px solid #bee5eb;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+
+        .floating-total {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            left: 10px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 12px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            font-weight: bold;
+            font-size: 1.1em;
+            z-index: 1000;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .item-row {
+                grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr auto;
+                gap: 10px;
+            }
+            
+            .preview-info {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .btn {
+                width: auto;
+                margin-bottom: 0;
+            }
+            
+            .floating-total {
+                left: auto;
+                border-radius: 50px;
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">PETER'S WHEELS</div>
+            <div class="subtitle">COMPRA, VENTA Y CONSIGNACIÓN DE LLANTAS NUEVAS Y SEMINUEVAS</div>
+        </div>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2 class="section-title">📋 Datos de la Cotización</h2>
+                
+                <div class="form-group">
+                    <label>Cliente:</label>
+                    <input type="text" id="cliente" placeholder="Nombre del cliente" autocomplete="name">
+                </div>
+                
+                <div class="form-group">
+                    <label>Teléfono:</label>
+                    <input type="tel" id="telefono" placeholder="Número de teléfono" autocomplete="tel">
+                </div>
+                
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="email" placeholder="Correo electrónico" autocomplete="email">
+                </div>
+
+                <div class="seller-section">
+                    <h3>👤 Datos del Vendedor</h3>
+                    <div class="form-group">
+                        <label>Nombre del Vendedor:</label>
+                        <input type="text" id="vendedor" placeholder="Nombre del vendedor" value="OSCAR SOLIS">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Dirección:</label>
+                        <input type="text" id="direccion" placeholder="Dirección" value="PANAMERICANA">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Teléfono:</label>
+                        <input type="tel" id="telefono-vendedor" placeholder="Teléfono del vendedor" value="9613565126">
+                    </div>
+                </div>
+
+                <div class="items-section">
+                    <h3>🛞 Productos</h3>
+                    <div id="items-container">
+                        <div class="item-row">
+                            <input type="text" placeholder="Medida" class="medida">
+                            <input type="text" placeholder="Marca" class="marca">
+                            <input type="number" placeholder="Cantidad" class="cantidad" min="1" value="1">
+                            <input type="number" placeholder="Precio c/u" class="precio" step="0.01">
+                            <input type="number" placeholder="Total" class="total" readonly="">
+                            <button type="button" class="btn btn-danger" onclick="removeItem(this)">❌</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="addItem()">➕ Agregar Producto</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Observaciones:</label>
+                    <textarea id="observaciones" rows="3" placeholder="Información adicional..."></textarea>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <h2 class="section-title">👁️ Vista Previa</h2>
+                <div class="preview" id="preview">
+                    <!-- La vista previa se generará aquí -->
+                </div>
+                <button type="button" class="btn btn-whatsapp" onclick="sendWhatsApp()">
+                    📱 Enviar por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-total" id="floating-total">
+        Total: $0.00
+    </div>
+
+    <script>
+        let itemCount = 1;
+
+        function addItem() {
+            itemCount++;
+            const container = document.getElementById('items-container');
+            const newItem = document.createElement('div');
+            newItem.className = 'item-row';
+            newItem.innerHTML = `
+                <input type="text" placeholder="Medida" class="medida">
+                <input type="text" placeholder="Marca" class="marca">
+                <input type="number" placeholder="Cantidad" class="cantidad" min="1" value="1">
+                <input type="number" placeholder="Precio c/u" class="precio" step="0.01">
+                <input type="number" placeholder="Total" class="total" readonly>
+                <button type="button" class="btn btn-danger" onclick="removeItem(this)">❌</button>
+            `;
+            container.appendChild(newItem);
+            addEventListeners(newItem);
+            updatePreview();
+        }
+
+        function removeItem(button) {
+            if (document.querySelectorAll('.item-row').length > 1) {
+                button.parentNode.remove();
+                updatePreview();
+            }
+        }
+
+        function addEventListeners(row) {
+            const cantidad = row.querySelector('.cantidad');
+            const precio = row.querySelector('.precio');
+            const total = row.querySelector('.total');
+
+            function updateTotal() {
+                const cantidadVal = parseFloat(cantidad.value) || 0;
+                const precioVal = parseFloat(precio.value) || 0;
+                total.value = (cantidadVal * precioVal).toFixed(2);
+                updatePreview();
+            }
+
+            cantidad.addEventListener('input', updateTotal);
+            precio.addEventListener('input', updateTotal);
+        }
+
+        function updatePreview() {
+            try {
+                const cliente = document.getElementById('cliente').value || 'ACUARIO EMPRESARIAL';
+                const telefono = document.getElementById('telefono').value;
+                const email = document.getElementById('email').value;
+                const observaciones = document.getElementById('observaciones').value;
+                const vendedor = document.getElementById('vendedor').value || 'OSCAR SOLIS';
+                const direccion = document.getElementById('direccion').value || 'PANAMERICANA';
+                const telefonoVendedor = document.getElementById('telefono-vendedor').value || '9613565126';
+                
+                const today = new Date();
+                const fecha = today.toLocaleDateString('es-MX', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                });
+
+                let itemsHtml = '';
+                let subtotal = 0;
+                const items = document.querySelectorAll('.item-row');
+                
+                items.forEach((item, index) => {
+                    const medida = item.querySelector('.medida').value;
+                    const marca = item.querySelector('.marca').value;
+                    const cantidad = parseFloat(item.querySelector('.cantidad').value) || 0;
+                    const precio = parseFloat(item.querySelector('.precio').value) || 0;
+                    const total = cantidad * precio;
+                    
+                    if (medida || marca || cantidad || precio) {
+                        itemsHtml += `
+                            <tr>
+                                <td>${medida}</td>
+                                <td>${marca}</td>
+                                <td>${cantidad}</td>
+                                <td>$${precio.toFixed(2)}</td>
+                                <td>$${total.toFixed(2)}</td>
+                            </tr>
+                        `;
+                        subtotal += total;
+                    }
+                });
+
+                const iva = subtotal * 0.16;
+                const totalConIva = subtotal + iva;
+
+                document.getElementById('floating-total').textContent = `Total: $${totalConIva.toFixed(2)}`;
+
+                const previewHtml = `
+                    <div class="preview-header">
+                        <h1 style="color: #2c3e50; font-size: 18px; margin-bottom: 5px;">🛞 PETER'S WHEELS</h1>
+                        <p style="color: #7f8c8d; font-size: 12px;">COMPRA, VENTA Y CONSIGNACIÓN DE LLANTAS NUEVAS Y SEMINUEVAS</p>
+                    </div>
+
+                    <div class="preview-info">
+                        <div>
+                            <strong>ATENCIÓN:</strong> ${cliente}<br>
+                            <strong>LUGAR:</strong> Tuxtla Gutiérrez, Chiapas<br>
+                            <strong>TELÉFONO:</strong> ${telefono}
+                        </div>
+                        <div style="text-align: right;">
+                            <strong>FECHA:</strong> ${fecha}<br>
+                            <strong>ASUNTO:</strong> COTIZACIÓN DE LLANTAS NUEVAS<br>
+                            <strong>EMAIL:</strong> ${email}
+                        </div>
+                    </div>
+
+                    <p style="margin: 15px 0;">Reciba un cordial saludo. Por medio del presente, adjunto la siguiente cotización:</p>
+
+                    <div class="table-responsive">
+                        <table class="preview-table">
+                            <thead>
+                                <tr>
+                                    <th>Medida</th>
+                                    <th>Marca</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio u/n</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="total-section">
+                        <div>Subtotal: $${subtotal.toFixed(2)}</div>
+                        <div>IVA (16%): $${iva.toFixed(2)}</div>
+                        <div style="font-size: 16px; color: #e74c3c; margin-top: 10px;">
+                            TOTAL: $${totalConIva.toFixed(2)}
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin: 20px 0;">
+                        <p>Quedo a sus órdenes para cualquier duda y/o aclaración, gracias por su preferencia.</p>
+                        <p style="font-weight: bold; margin-top: 15px;">ATENTAMENTE</p>
+                        <p style="font-weight: bold;">PEDRO GOMEZ SANCHEZ</p>
+                    </div>
+
+                    <div style="margin-top: 20px; font-size: 11px;">
+                        <strong>VENDEDOR:</strong> ${vendedor}<br>
+                        <strong>DIRECCIÓN:</strong> ${direccion}<br>
+                        <strong>TELÉFONOS:</strong> ${telefonoVendedor}
+                    </div>
+
+                    <div class="bank-accounts-preview">
+                        <div class="bank-title">CUENTAS PARA PAGO</div>
+                        <div class="bank-item">
+                            <div class="bank-name">BANCO AZTECA</div>
+                            <div class="account-info">
+                                <strong>Titular:</strong> PEDRO GÓMEZ SÁNCHEZ<br>
+                                <strong>Cuenta:</strong> 127100001036071102<br>
+                                <strong>CLABE:</strong> 127180001036071102<br>
+                                <strong>RFC:</strong> GOSP730422I57
+                            </div>
+                        </div>
+                        <div class="bank-item">
+                            <div class="bank-name">SANTANDER</div>
+                            <div class="account-info">
+                                <strong>Titular:</strong> PEDRO GÓMEZ SÁNCHEZ<br>
+                                <strong>Cuenta:</strong> 65501992450<br>
+                                <strong>CLABE:</strong> 014180655019924509<br>
+                                <strong>RFC:</strong> GOSP730422I57
+                            </div>
+                        </div>
+                        <div class="bank-item">
+                            <div class="bank-name">BANAMEX</div>
+                            <div class="account-info">
+                                <strong>Titular:</strong> PEDRO GÓMEZ SÁNCHEZ<br>
+                                <strong>Cuenta:</strong> 5269414<br>
+                                <strong>CLABE:</strong> 0021805269414<br>
+                                <strong>RFC:</strong> GOSP730422I57
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="notes">
+                        <strong>NOTA:</strong> Todos nuestros precios incluyen IVA, MONTAJE, BALANCEO, ALINEACIÓN, CAMBIO DE VÁLVULA, garantía contra defecto de fabricación en productos seleccionados. <strong style="color: #e74c3c;">VIGENCIA DE COTIZACIÓN 5 DÍAS DESPUÉS DE LA FECHA DE ENVÍO.</strong>
+                        ${observaciones ? `<br><br><strong>OBSERVACIONES:</strong> ${observaciones}` : ''}
+                    </div>
+                `;
+
+                document.getElementById('preview').innerHTML = previewHtml;
+            } catch (error) {
+                console.error("Error en updatePreview:", error);
+                document.getElementById('preview').innerHTML = "<p>Error al generar vista previa. Por favor recargue la página.</p>";
+            }
+        }
+
+        function sendWhatsApp() {
+            try {
+                const telefono = document.getElementById('telefono').value;
+                const cliente = document.getElementById('cliente').value || 'Cliente';
+                const vendedor = document.getElementById('vendedor').value || 'OSCAR SOLIS';
+                
+                if (!telefono) {
+                    alert('Por favor ingresa el número de teléfono del cliente');
+                    return;
+                }
+
+                let mensaje = `🛞 *PETER'S WHEELS*\n`;
+                mensaje += `COTIZACIÓN DE LLANTAS\n\n`;
+                mensaje += `📋 *Cliente:* ${cliente}\n`;
+                mensaje += `📅 *Fecha:* ${new Date().toLocaleDateString('es-MX')}\n\n`;
+                
+                mensaje += `*PRODUCTOS COTIZADOS:*\n`;
+                mensaje += `━━━━━━━━━━━━━━━━━━━━━\n`;
+
+                const items = document.querySelectorAll('.item-row');
+                let subtotal = 0;
+                
+                items.forEach((item, index) => {
+                    const medida = item.querySelector('.medida').value;
+                    const marca = item.querySelector('.marca').value;
+                    const cantidad = parseFloat(item.querySelector('.cantidad').value) || 0;
+                    const precio = parseFloat(item.querySelector('.precio').value) || 0;
+                    const total = cantidad * precio;
+                    
+                    if (medida || marca || cantidad || precio) {
+                        mensaje += `${index + 1}. ${medida} - ${marca}\n`;
+                        mensaje += `   Cantidad: ${cantidad} | Precio: $${precio.toFixed(2)}\n`;
+                        mensaje += `   Subtotal: $${total.toFixed(2)}\n\n`;
+                        subtotal += total;
+                    }
+                });
+
+                const iva = subtotal * 0.16;
+                const totalConIva = subtotal + iva;
+
+                mensaje += `━━━━━━━━━━━━━━━━━━━━━\n`;
+                mensaje += `💰 *RESUMEN:*\n`;
+                mensaje += `Subtotal: $${subtotal.toFixed(2)}\n`;
+                mensaje += `IVA (16%): $${iva.toFixed(2)}\n`;
+                mensaje += `*TOTAL: $${totalConIva.toFixed(2)}*\n\n`;
+                
+                mensaje += `✅ Incluye: IVA, Montaje, Balanceo, Alineación, Cambio de válvula\n`;
+                mensaje += `🛡️ Garantía contra defecto de fabricación\n`;
+                mensaje += `⏰ *Vigencia: 5 días*\n\n`;
+                mensaje += `📞 *Contacto:* ${vendedor}\n`;
+                mensaje += `📍 *Ubicación:* ${document.getElementById('direccion').value || 'Panamericana'}, Tuxtla Gutiérrez, Chiapas\n\n`;
+                
+                mensaje += `💳 *CUENTAS PARA PAGO:*\n`;
+                mensaje += `━━━━━━━━━━━━━━━━━━━━━\n`;
+                mensaje += `*BANCO AZTECA*\n`;
+                mensaje += `Titular: PEDRO GÓMEZ SÁNCHEZ\n`;
+                mensaje += `Cuenta: 127100001036071102\n`;
+                mensaje += `CLABE: 127180001036071102\n\n`;
+                mensaje += `*SANTANDER*\n`;
+                mensaje += `Titular: PEDRO GÓMEZ SÁNCHEZ\n`;
+                mensaje += `Cuenta: 65501992450\n`;
+                mensaje += `CLABE: 014180655019924509\n\n`;
+                mensaje += `*BANAMEX*\n`;
+                mensaje += `Titular: PEDRO GÓMEZ SÁNCHEZ\n`;
+                mensaje += `Cuenta: 5269414\n`;
+                mensaje += `CLABE: 0021805269414`;
+
+                const numeroLimpio = telefono.replace(/\D/g, '');
+                const numeroCompleto = numeroLimpio.startsWith('521') ? numeroLimpio : '521' + numeroLimpio;
+                
+                const url = `https://wa.me/${numeroCompleto}?text=${encodeURIComponent(mensaje)}`;
+                window.open(url, '_blank');
+            } catch (error) {
+                console.error("Error en sendWhatsApp:", error);
+                alert("Error al enviar mensaje. Por favor intente nuevamente.");
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                // Agregar event listeners a todos los campos
+                document.getElementById('cliente').addEventListener('input', updatePreview);
+                document.getElementById('telefono').addEventListener('input', updatePreview);
+                document.getElementById('email').addEventListener('input', updatePreview);
+                document.getElementById('observaciones').addEventListener('input', updatePreview);
+                document.getElementById('vendedor').addEventListener('input', updatePreview);
+                document.getElementById('direccion').addEventListener('input', updatePreview);
+                document.getElementById('telefono-vendedor').addEventListener('input', updatePreview);
+                
+                // Agregar event listeners al primer item
+                const firstItem = document.querySelector('.item-row');
+                if (firstItem) {
+                    addEventListeners(firstItem);
+                }
+                
+                // Actualizar preview inicial
+                updatePreview();
+            } catch (error) {
+                console.error("Error en inicialización:", error);
+            }
+        });
+    </script>
+
+</body></html>
